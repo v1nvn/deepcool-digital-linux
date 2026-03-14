@@ -139,56 +139,31 @@ fn main() {
         1..=4 => {
             if args.se {
                 println!("SE mode enabled for AK400 DIGITAL SE");
-                println!("Supported modes: {} [default: {}]", "auto cpu_temp cpu_usage".bold(), ak_se::DEFAULT_MODE.symbol());
-                // Connect to device
-                let ak_device = ak_se::Display::new(cpu, &args.mode, args.update, args.fahrenheit, args.alarm);
-                // Print current configuration & warnings
-                print_device_status(
-                    &ak_device.mode,
-                    None,
-                    None,
-                    if args.fahrenheit { TemperatureUnit::Fahrenheit } else { TemperatureUnit::Celsius },
-                    Alarm {
-                        state: if args.alarm { AlarmState::On } else { AlarmState::Off },
-                        temp_limit: if args.fahrenheit {
-                            ak_se::TEMP_LIMIT_F
-                        } else {
-                            ak_se::TEMP_LIMIT_C
-                        },
-                        temp_warning: 0,
-                    },
-                    args.update,
-                );
-                common_warnings::secondary_mode(&args);
-                common_warnings::rotate(&args);
-                // Display loop
-                ak_device.run(&api, DEFAULT_VENDOR_ID, product_id);
-            } else {
-                println!("Supported modes: {} [default: {}]", "auto cpu_temp cpu_usage".bold(), ak_series::DEFAULT_MODE.symbol());
-                // Connect to device
-                let ak_device = ak_series::Display::new(cpu, &args.mode, args.update, args.fahrenheit, args.alarm);
-                // Print current configuration & warnings
-                print_device_status(
-                    &ak_device.mode,
-                    None,
-                    None,
-                    if args.fahrenheit { TemperatureUnit::Fahrenheit } else { TemperatureUnit::Celsius },
-                    Alarm {
-                        state: if args.alarm { AlarmState::On } else { AlarmState::Off },
-                        temp_limit: if args.fahrenheit {
-                            ak_series::TEMP_LIMIT_F
-                        } else {
-                            ak_series::TEMP_LIMIT_C
-                        },
-                        temp_warning: 0,
-                    },
-                    args.update,
-                );
-                common_warnings::secondary_mode(&args);
-                common_warnings::rotate(&args);
-                // Display loop
-                ak_device.run(&api, DEFAULT_VENDOR_ID, product_id);
             }
+            println!("Supported modes: {} [default: {}]", "auto cpu_temp cpu_usage".bold(), ak_series::DEFAULT_MODE.symbol());
+            // Connect to device
+            let ak_device = ak_series::Display::new(cpu, &args.mode, args.update, args.fahrenheit, args.alarm, args.se);
+            // Print current configuration & warnings
+            print_device_status(
+                &ak_device.mode,
+                None,
+                None,
+                if args.fahrenheit { TemperatureUnit::Fahrenheit } else { TemperatureUnit::Celsius },
+                Alarm {
+                    state: if args.alarm { AlarmState::On } else { AlarmState::Off },
+                    temp_limit: if args.fahrenheit {
+                        ak_series::TEMP_LIMIT_F
+                    } else {
+                        ak_series::TEMP_LIMIT_C
+                    },
+                    temp_warning: 0,
+                },
+                args.update,
+            );
+            common_warnings::secondary_mode(&args);
+            common_warnings::rotate(&args);
+            // Display loop
+            ak_device.run(&api, DEFAULT_VENDOR_ID, product_id);
         }
         // LS Series
         6 => {
