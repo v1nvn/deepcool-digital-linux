@@ -12,6 +12,7 @@ pub struct Args {
     pub fahrenheit: bool,
     pub alarm: bool,
     pub rotate: u16,
+    pub se: bool,
 }
 
 impl Args {
@@ -25,6 +26,7 @@ impl Args {
         let mut fahrenheit = false;
         let mut alarm = false;
         let mut rotate = 0;
+        let mut se = false;
 
         let mut i = 1;
         while i < args.len() {
@@ -129,6 +131,9 @@ impl Args {
                 "-a" | "--alarm" => {
                     alarm = true;
                 }
+                "--se" => {
+                    se = true;
+                }
                 "-r" | "--rotate" => {
                     if i + 1 < args.len() {
                         match args[i + 1].parse::<u16>() {
@@ -211,6 +216,7 @@ impl Args {
                     println!("\n  {}, {} <MILLISEC> Change the update interval of the display [default: 1000]", "-u".bold(), "--update".bold());
                     println!("  {}, {}        Change the temperature unit to °F", "-f".bold(), "--fahrenheit".bold());
                     println!("  {}, {}             Enable the alarm", "-a".bold(), "--alarm".bold());
+                    println!("      {}              Use AK400 DIGITAL SE protocol (no report ID)", "--se".bold());
                     println!("  {}, {} <DEGREE>   Rotate the display (LP Series only)", "-r".bold(), "--rotate".bold());
                     println!("\n{}", "Commands:".bold());
                     println!("  {}, {}         Print Product ID of the connected devices", "-l".bold(), "--list".bold());
@@ -330,6 +336,7 @@ impl Args {
             fahrenheit,
             alarm,
             rotate,
+            se,
         }
     }
 }
